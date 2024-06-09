@@ -12,6 +12,7 @@ env:
   TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
   TF_CONFIG_DIRECTORY: "./"
   IMAGE_TAG: ${{ github.sha }}
+  ECR_REPO: ${{ secrets.ECR_REPO }}
   TF_VAR_container_image_tag: "\"${{ github.sha }}\""
   TF_VAR_ecs_subnet_1: "\"${{ secrets.ECS_SUBNET_1 }}\""
   TF_VAR_ecs_subnet_2: "\"${{ secrets.ECS_SUBNET_2 }}\""
@@ -36,11 +37,6 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    - name: Create Environment Variables
-      run: |
-        export PACKAGE_NAME=$(cat package.json | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-        echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with: 
@@ -57,8 +53,6 @@ jobs:
       env: 
         ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
       run: |
-        export ECR_REPO=$(cat package.json | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-        echo "ECR_REPO=$ECR_REPO" >> $GITHUB_ENV
         docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG" >> $GITHUB_OUTPUT
