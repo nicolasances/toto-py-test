@@ -56,7 +56,7 @@ jobs:
       id: build-image
       env: 
         ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
-        ECR_REPO: ${{env.PACKAGE_NAME}}
+        ECR_REPO: $(cat package.json | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
