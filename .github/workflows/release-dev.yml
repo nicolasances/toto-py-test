@@ -10,7 +10,7 @@ env:
   TF_CLOUD_ORGANIZATION: "Imatz"
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
   TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }}
-  TF_CONFIG_DIRECTORY: "./"
+  TF_CONFIG_DIRECTORY: "./terraform"
   IMAGE_TAG: ${{ github.sha }}
   ECR_REPO: ${{ secrets.ECR_REPO }}
   TF_VAR_container_image_tag: "\"${{ github.sha }}\""
