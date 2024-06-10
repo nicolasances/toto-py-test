@@ -24,6 +24,15 @@ resource "aws_ecs_task_definition" "service_task_def" {
           appProtocol   = "http"
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs", 
+        options = {
+          awslogs-create-group = "true"
+          awslogs-group = format("/ecs/%s", local.toto_microservice_name)
+          awslogs-region = "eu-west-1"
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 }
