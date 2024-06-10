@@ -32,7 +32,7 @@ resource "aws_ecs_task_definition" "service_task_def" {
 # 2. Service
 ########################################################
 resource "aws_ecs_service" "service" {
-  name = "toto-py-service"
+  name = local.toto_microservice_name
   cluster = var.ecs_cluster_arn
   task_definition = aws_ecs_task_definition.service_task_def.arn
   desired_count = 1
