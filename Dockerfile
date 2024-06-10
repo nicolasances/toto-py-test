@@ -9,6 +9,7 @@ COPY requirements.txt .
 
 # Install project dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install gunicorn
 
 # Copy the application code into the container
 COPY . .
